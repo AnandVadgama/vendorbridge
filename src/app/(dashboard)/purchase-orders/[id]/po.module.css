@@ -1,0 +1,459 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.topHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--accent-blue);
+  font-size: 0.875rem;
+  font-weight: 500;
+  width: fit-content;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.backBtn:hover {
+  color: var(--accent-primary);
+  transform: translateX(-2px);
+}
+
+.actionsMenu {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.actionIconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.actionIconBtn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+/* Layout Columns */
+.layout {
+  display: grid;
+  grid-template-columns: 1.9fr 1.1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.documentCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.opsCol {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Invoice Paper Sheet Layout */
+.invoiceSheet {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+
+.docHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 1.5rem;
+}
+
+.logoBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.logoTitle {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
+}
+
+.logoSub {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.docTypeLabel {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.docTypeLabel h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin: 0;
+}
+
+.monoPoNum {
+  font-family: monospace;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* Address Box Section */
+.addressSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 580px) {
+  .addressSection {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.billToBox,
+.vendorBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sectionTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.addressDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.addressDetails strong {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.addressDetails p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.addressDetails span {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+/* Document details row metadata */
+.docDetailsRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+
+@media (max-width: 580px) {
+  .docDetailsRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.docDetailBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detailLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.detailVal {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Items Table */
+.itemsTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.itemsTable th {
+  padding: 0.75rem 1rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.itemsTable td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.productName {
+  font-weight: 600;
+}
+
+/* Pricing Breakdown Block */
+.financialSummaryBlock {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.pricingSummaryTable {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.priceRow span:last-child {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.discountVal {
+  color: var(--accent-red) !important;
+}
+
+.pricingDivider {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 0.25rem 0;
+}
+
+.grandTotal {
+  font-size: 1.15rem;
+}
+
+.grandTotal span:first-child {
+  font-weight: 700;
+  color: var(--text-primary) !important;
+}
+
+.grandTotal span:last-child {
+  color: var(--accent-primary) !important;
+  font-weight: 800;
+}
+
+/* Operations Column Card */
+.opsCard {
+  padding: 1.5rem;
+}
+
+.opsStateBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  padding: 1.5rem 0;
+}
+
+.opsIconWarning {
+  color: var(--accent-orange);
+}
+
+.opsText {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Invoice Operations details */
+.invoiceOpsDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.opsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.opsRow span {
+  color: var(--text-secondary);
+}
+
+.opsRow strong {
+  color: var(--text-primary);
+}
+
+.mono {
+  font-family: monospace;
+  font-weight: 600;
+  color: var(--accent-blue);
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 0.5rem 0;
+}
+
+.pendingOpsBox {
+  background-color: rgba(245, 158, 11, 0.05);
+  border: 1px dashed var(--accent-orange);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.pendingText {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.pendingText strong {
+  color: var(--accent-orange);
+}
+
+.paidOpsBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.paidIcon {
+  color: var(--accent-primary);
+}
+
+.paidOpsBox h4 {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.paidOpsBox p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.loaderContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.errorIcon {
+  color: var(--accent-red);
+}
+
+/* CSS Print Media Overrides */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .invoiceSheet, .invoiceSheet * {
+    visibility: visible;
+  }
+  .invoiceSheet {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: none;
+    background-color: #fff;
+    color: #000;
+    padding: 0;
+  }
+  .monoPoNum, .detailVal, .addressDetails, .addressDetails p, .addressDetails span, .priceRow, .priceRow span {
+    color: #000 !important;
+  }
+  .docDetailsRow {
+    background-color: #f5f5f5 !important;
+    border-color: #ddd !important;
+  }
+  .itemsTable th {
+    border-bottom-color: #000 !important;
+  }
+  .itemsTable td {
+    border-bottom-color: #eee !important;
+  }
+}
