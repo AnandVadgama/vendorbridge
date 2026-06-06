@@ -1,0 +1,71 @@
+.container { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.tableCard {
+  padding: 1.5rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.tabsRow {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.tabButton {
+  padding: 0.4rem 0.875rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tabButton[data-active='true'] {
+  background-color: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #3b82f6;
+}
+
+.tabButton:hover:not([data-active='true']) {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.stateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.errorIcon { color: var(--accent-red); }
+.emptyIcon { color: var(--text-muted); }
+.mono { font-family: 'Courier New', monospace; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
+
+.rfqNum { font-size: 0.75rem; font-weight: 700; color: var(--accent-secondary); margin: 0; }
+.rfqTitle { font-size: 0.8rem; color: var(--text-secondary); margin: 0; margin-top: 0.15rem; }
+
+.amount { font-weight: 700; color: var(--text-primary); }
+.na { color: var(--text-muted); }
+
+.actionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+.actionLink:hover { opacity: 0.7; }

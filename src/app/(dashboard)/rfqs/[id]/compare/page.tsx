@@ -13,7 +13,13 @@ import { Badge } from '@/components/ui/Badge/Badge';
 import { formatCurrency } from '@/lib/utils';
 import styles from './compare.module.css';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then(async (res) => {
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.error || 'Failed to fetch quotation comparison');
+  }
+  return res.json();
+});
 
 interface RfqItem {
   id: string;
@@ -94,7 +100,11 @@ export default function CompareQuotationsPage() {
     return (
       <div className={styles.errorContainer}>
         <ShieldAlert size={48} className={styles.errorIcon} />
-        <p>Failed to load quotation comparison details. Please make sure the database is seeded.</p>
+        <p>
+          {error?.message === 'Forbidden'
+            ? 'Access Denied: You do not have permission to view this quotation comparison.'
+            : 'Failed to load quotation comparison details. Please make sure the database is seeded.'}
+        </p>
         <Link href="/rfqs">
           <Button variant="secondary" style={{ marginTop: '1rem' }}>
             <ArrowLeft size={16} /> Back to RFQs

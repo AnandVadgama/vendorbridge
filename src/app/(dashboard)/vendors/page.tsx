@@ -15,7 +15,13 @@ import { VENDOR_STATUS, VendorStatusType } from '@/lib/constants';
 import { Vendor } from '@/types';
 import styles from './vendors.module.css';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then(async (res) => {
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.error || 'Failed to fetch vendors');
+  }
+  return res.json();
+});
 
 export default function VendorsPage() {
   const { data: session } = useSession();
@@ -143,7 +149,11 @@ export default function VendorsPage() {
             <div className="spinner" />
           </div>
         ) : error ? (
-          <div className={styles.errorContainer}>Failed to load supplier records.</div>
+          <div className={styles.errorContainer}>
+            {error.message === 'Forbidden'
+              ? 'Access Denied: You do not have permission to view vendor profiles.'
+              : 'Failed to load supplier records.'}
+          </div>
         ) : vendors.length === 0 ? (
           <div className={styles.emptyContainer}>
             <ShieldAlert size={40} className={styles.emptyIcon} />

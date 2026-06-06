@@ -1,0 +1,139 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.tableCard {
+  padding: 1.5rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.controlsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.tabButton {
+  padding: 0.4rem 0.875rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tabButton[data-active='true'] {
+  background-color: rgba(52, 211, 153, 0.12);
+  border-color: rgba(52, 211, 153, 0.3);
+  color: var(--accent-primary);
+}
+
+.tabButton:hover:not([data-active='true']) {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.searchBox {
+  position: relative;
+  flex: 1;
+  max-width: 320px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.625rem 0.875rem 0.625rem 2.5rem;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  transition: border-color var(--transition-fast);
+}
+
+.searchInput:focus {
+  border-color: var(--border-focus);
+  outline: none;
+}
+
+.stateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.errorIcon { color: var(--accent-red); }
+.emptyIcon { color: var(--text-muted); }
+
+.mono {
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.titleMain {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.titleSub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0;
+  margin-top: 0.2rem;
+}
+
+.countBadge {
+  font-size: 0.8rem;
+  color: var(--accent-secondary);
+  font-weight: 600;
+}
+
+.actionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.actionLink:hover { opacity: 0.7; }
+
+.noAction {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}

@@ -1,0 +1,82 @@
+.container { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.alertBanner {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1.25rem;
+  background-color: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-sm);
+  color: #f87171;
+  font-size: 0.875rem;
+}
+
+.tableCard {
+  padding: 1.5rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.tabsRow {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.tabButton {
+  padding: 0.4rem 0.875rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tabButton[data-active='true'] {
+  background-color: rgba(52, 211, 153, 0.12);
+  border-color: rgba(52, 211, 153, 0.3);
+  color: var(--accent-primary);
+}
+
+.tabButton:hover:not([data-active='true']) {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.stateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.errorIcon { color: var(--accent-red); }
+.emptyIcon { color: var(--text-muted); }
+.mono { font-family: 'Courier New', monospace; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
+.poNum { font-size: 0.8rem; font-weight: 600; color: var(--accent-secondary); }
+.amount { font-weight: 700; color: var(--text-primary); }
+.paidDate { color: var(--accent-primary); font-size: 0.85rem; }
+.na { color: var(--text-muted); }
+
+.actionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+.actionLink:hover { opacity: 0.7; }

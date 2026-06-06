@@ -4,8 +4,8 @@ import { prisma } from '@/lib/prisma';
 import { Role } from '@prisma/client';
 
 /**
- * GET /api/quotations
- * Lists all quotations with vendor, RFQ, and status info.
+ * GET /api/purchase-orders
+ * Lists all purchase orders with vendor info.
  * Allowed: ADMIN, PROCUREMENT_OFFICER, MANAGER (all); VENDOR (own only)
  */
 export const GET = auth(async (req) => {
@@ -24,7 +24,7 @@ export const GET = auth(async (req) => {
       where.status = status;
     }
 
-    // Vendors can only see their own quotations
+    // Vendors can only see their own POs
     if (role === Role.VENDOR) {
       const vendor = await prisma.vendor.findFirst({ where: { userId } });
       if (!vendor) {
@@ -33,25 +33,22 @@ export const GET = auth(async (req) => {
       where.vendorId = vendor.id;
     }
 
-    const quotations = await prisma.quotation.findMany({
+    const pos = await prisma.purchaseOrder.findMany({
       where,
-      orderBy: { createdAt: 'desc' },
+      orderBy: { poDate: 'desc' },
       include: {
         vendor: {
           select: { companyName: true },
         },
-        rfq: {
-          select: { rfqNumber: true, title: true, category: true },
-        },
         _count: {
-          select: { items: true },
+          select: { invoices: true },
         },
       },
     });
 
-    return NextResponse.json(quotations);
+    return NextResponse.json(pos);
   } catch (error: any) {
-    console.error('❌ GET /api/quotations error:', error);
-    return NextResponse.json({ error: 'Failed to fetch quotations' }, { status: 500 });
+    console.error('❌ GET /api/purchase-orders error:', error);
+    return NextResponse.json({ error: 'Failed to fetch purchase orders' }, { status: 500 });
   }
 });

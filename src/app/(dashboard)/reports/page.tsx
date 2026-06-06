@@ -27,7 +27,13 @@ import {
 } from 'recharts';
 import styles from './reports.module.css';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then(async (res) => {
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.error || 'Failed to load reports');
+  }
+  return res.json();
+});
 
 interface ReportsData {
   stats: {
@@ -75,7 +81,11 @@ export default function ReportsPage() {
     return (
       <div className={styles.errorContainer}>
         <AlertCircle size={48} className={styles.errorIcon} />
-        <p>Failed to load analytical reports. Ensure database seeding is complete.</p>
+        <p>
+          {error?.message === 'Forbidden'
+            ? 'Access Denied: You do not have permission to view analytical reports.'
+            : 'Failed to load analytical reports. Ensure database seeding is complete.'}
+        </p>
       </div>
     );
   }

@@ -30,7 +30,13 @@ import {
 } from 'recharts';
 import styles from './dashboard.module.css';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then(async (res) => {
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.error || 'Failed to fetch dashboard metrics');
+  }
+  return res.json();
+});
 
 interface DashboardData {
   metrics: {
@@ -77,7 +83,9 @@ export default function DashboardPage() {
   if (error || !data) {
     return (
       <div className={styles.errorContainer}>
-        Failed to load dashboard metrics. Ensure your database container is running.
+        {error?.message === 'Forbidden'
+          ? 'Access Denied: You do not have permission to view the staff dashboard.'
+          : 'Failed to load dashboard metrics. Ensure your database container is running.'}
       </div>
     );
   }

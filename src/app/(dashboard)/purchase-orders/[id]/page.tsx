@@ -23,7 +23,13 @@ import { Badge } from '@/components/ui/Badge/Badge';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import styles from './po.module.css';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then(async (res) => {
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.error || 'Failed to fetch Purchase Order details');
+  }
+  return res.json();
+});
 
 interface RfqItem {
   productName: string;
@@ -104,7 +110,11 @@ export default function PurchaseOrderDetailPage() {
     return (
       <div className={styles.errorContainer}>
         <AlertCircle size={48} className={styles.errorIcon} />
-        <p>Failed to load Purchase Order details. Verify that you have run database seeds.</p>
+        <p>
+          {error?.message === 'Forbidden'
+            ? 'Access Denied: You do not have permission to view this Purchase Order.'
+            : 'Failed to load Purchase Order details. Verify that you have run database seeds.'}
+        </p>
         <Link href="/purchase-orders">
           <Button variant="secondary" style={{ marginTop: '1rem' }}>
             <ArrowLeft size={16} /> Back to Purchase Orders

@@ -18,7 +18,13 @@ import {
 import { formatDate } from '@/lib/utils';
 import styles from './activity.module.css';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then(async (res) => {
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.error || 'Failed to fetch activity logs');
+  }
+  return res.json();
+});
 
 interface ActivityLog {
   id: string;

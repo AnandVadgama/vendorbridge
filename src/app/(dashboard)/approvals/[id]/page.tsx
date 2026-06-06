@@ -13,7 +13,13 @@ import { Badge } from '@/components/ui/Badge/Badge';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import styles from './approval.module.css';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then(async (res) => {
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.error || 'Failed to fetch approval details');
+  }
+  return res.json();
+});
 
 interface UserSelect {
   id: string;
@@ -111,7 +117,11 @@ export default function ApprovalDetailPage() {
     return (
       <div className={styles.errorContainer}>
         <ShieldAlert size={48} className={styles.errorIcon} />
-        <p>Failed to load approval workflow details. Make sure the database seeds are complete.</p>
+        <p>
+          {error?.message === 'Forbidden'
+            ? 'Access Denied: You do not have permission to view this approval workflow.'
+            : 'Failed to load approval workflow details. Make sure the database seeds are complete.'}
+        </p>
         <Link href="/approvals">
           <Button variant="secondary" style={{ marginTop: '1rem' }}>
             <ArrowLeft size={16} /> Back to Approvals
