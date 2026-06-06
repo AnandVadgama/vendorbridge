@@ -43,3 +43,4 @@ next-env.d.ts
 # local model / agent instructions
 AGENTS.md
 CLAUDE.md
+Implementation Plan.md
