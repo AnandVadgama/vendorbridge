@@ -1,0 +1,325 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.topHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent-blue);
+  font-size: 0.875rem;
+  font-weight: 500;
+  width: fit-content;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.backBtn:hover {
+  color: var(--accent-primary);
+  transform: translateX(-2px);
+}
+
+.comparisonLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.gridContainer {
+  width: 100%;
+  overflow-x: auto;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.compareTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  table-layout: fixed;
+  min-width: 800px;
+}
+
+.compareTable th,
+.compareTable td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.criteriaHeader {
+  width: 250px;
+  background-color: var(--bg-table-header);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-right: 1px solid var(--border-color);
+}
+
+.vendorHeader {
+  background-color: var(--bg-table-header);
+  border-right: 1px solid var(--border-color);
+  position: relative;
+  transition: background-color var(--transition-fast);
+}
+
+.lowestHeader {
+  background-color: rgba(52, 211, 153, 0.02);
+}
+
+.vendorHeaderBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.lowestBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.vendorName {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-top: 0.5rem;
+}
+
+.vendorRating {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.quoteNumber {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.sectionDivider {
+  background-color: var(--bg-secondary);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-blue);
+}
+
+.sectionDivider td {
+  padding: 0.5rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.itemDetailCell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border-right: 1px solid var(--border-color);
+  background-color: rgba(23, 27, 48, 0.2);
+}
+
+.itemName {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.itemQty {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.priceCell {
+  border-right: 1px solid var(--border-color);
+}
+
+.priceDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.unitPrice {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.totalPrice {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.totalPrice strong {
+  color: var(--text-primary);
+}
+
+.notQuoted {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.875rem;
+}
+
+.criteriaCell {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  border-right: 1px solid var(--border-color);
+  background-color: rgba(23, 27, 48, 0.2);
+}
+
+.critBox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dataCell {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  border-right: 1px solid var(--border-color);
+}
+
+.discountCell {
+  color: var(--accent-red);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-right: 1px solid var(--border-color);
+}
+
+.grandTotalRow {
+  background-color: rgba(255, 255, 255, 0.01);
+}
+
+.grandTotalRow td {
+  border-top: 2px solid var(--border-color);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.grandTotalValue {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-right: 1px solid var(--border-color);
+}
+
+.lowestTotalValue {
+  color: var(--accent-primary);
+  background-color: rgba(52, 211, 153, 0.05);
+}
+
+.boldDetail {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.wrappedText {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.notesCell {
+  border-right: 1px solid var(--border-color);
+  max-width: 250px;
+}
+
+.actionRow {
+  background-color: var(--bg-table-header);
+}
+
+.actionCell {
+  border-right: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.approvedStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.approveBtn {
+  width: 100%;
+  max-width: 160px;
+}
+
+.bottomDisclaimer {
+  background-color: rgba(59, 130, 246, 0.05);
+  border: 1px dashed var(--accent-blue);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+
+.note {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.note strong {
+  color: var(--accent-blue);
+}
+
+.noQuotesCard {
+  padding: 4rem 2rem;
+}
+
+.noQuotesState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.noQuotesIcon {
+  color: var(--text-muted);
+}
+
+.noQuotesState h3 {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.noQuotesState p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  max-width: 400px;
+}
+
+.loaderContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.errorIcon {
+  color: var(--accent-red);
+}
