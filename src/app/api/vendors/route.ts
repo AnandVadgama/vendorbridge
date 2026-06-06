@@ -102,7 +102,7 @@ export const POST = auth(async (req) => {
     }
 
     // Determine status (default to PENDING)
-    let vendorStatus = VendorStatus.PENDING;
+    let vendorStatus: VendorStatus = VendorStatus.PENDING;
     if (status && Object.values(VendorStatus).includes(status as VendorStatus)) {
       vendorStatus = status as VendorStatus;
     }

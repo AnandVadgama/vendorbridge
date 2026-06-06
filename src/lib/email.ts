@@ -38,7 +38,7 @@ function getTransporter() {
       user: SMTP_USER,
       password: SMTP_PASSWORD,
     },
-  });
+  } as any);
 }
 
 /**

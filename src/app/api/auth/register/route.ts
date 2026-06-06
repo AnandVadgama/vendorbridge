@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // 4. Determine user role from input (default to PROCUREMENT_OFFICER)
-    let userRole = Role.PROCUREMENT_OFFICER;
+    let userRole: Role = Role.PROCUREMENT_OFFICER;
     if (Object.values(Role).includes(role as Role)) {
       userRole = role as Role;
     }
