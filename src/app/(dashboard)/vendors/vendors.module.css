@@ -1,0 +1,236 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.addBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tableCard {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* === CONTROLS ROW === */
+.controlsRow {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  background-color: var(--bg-table-header);
+}
+
+@media (max-width: 900px) {
+  .controlsRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+}
+
+/* === TABS === */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid transparent;
+  overflow-x: auto;
+}
+
+.tabButton {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  text-transform: capitalize;
+}
+
+.tabButton:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.tabButton[data-active="true"] {
+  color: var(--accent-primary);
+  background-color: rgba(52, 211, 153, 0.08);
+}
+
+/* === SEARCH === */
+.searchBox {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.75rem;
+  width: 300px;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+}
+
+@media (max-width: 900px) {
+  .searchBox {
+    width: 100%;
+  }
+}
+
+.searchBox:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.1);
+}
+
+.searchIcon {
+  color: var(--text-muted);
+}
+
+.searchInput {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  width: 100%;
+  font-size: 0.85rem;
+}
+
+/* === TABLE STYLING === */
+.companyName {
+  font-weight: 500;
+}
+
+.companyTitle {
+  font-size: 0.925rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.companySub {
+  font-size: 0.775rem;
+  color: var(--text-secondary);
+  margin-top: 0.125rem;
+}
+
+.mono {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.contactName {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.contactEmail {
+  font-size: 0.775rem;
+  color: var(--text-muted);
+}
+
+.ratingCell {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fbbf24; /* Amber star color */
+}
+
+.starIcon {
+  fill: #fbbf24;
+  color: #fbbf24;
+}
+
+/* === ACTIONS === */
+.actionBtns {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.actionIconBtn,
+.actionIconBtnDelete {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.actionIconBtn:hover {
+  color: var(--accent-blue);
+  background-color: rgba(59, 130, 246, 0.08);
+}
+
+.actionIconBtnDelete:hover {
+  color: var(--accent-red);
+  background-color: rgba(239, 68, 68, 0.08);
+}
+
+/* === STATES === */
+.loaderContainer,
+.errorContainer,
+.emptyContainer {
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.emptyIcon {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.emptyContainer p {
+  font-size: 0.95rem;
+}
+
+/* === DELETE CONFIRM MODAL === */
+.deleteConfirmContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.deleteAlertIcon {
+  color: var(--accent-red);
+}
+
+.deleteTitle {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.deleteDesc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.deleteActions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
