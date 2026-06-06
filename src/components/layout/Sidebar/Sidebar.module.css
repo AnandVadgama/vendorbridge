@@ -7,6 +7,7 @@
   flex-direction: column;
   flex-shrink: 0;
   user-select: none;
+  transition: background-color var(--transition-normal), border-right var(--transition-normal);
 }
 
 .logoContainer {
@@ -73,17 +74,17 @@
 
 .navLink:hover {
   color: var(--text-primary);
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: rgba(16, 185, 129, 0.04);
 }
 
 .active {
   color: var(--accent-primary);
-  background-color: rgba(52, 211, 153, 0.06);
+  background-color: rgba(16, 185, 129, 0.08);
   font-weight: 600;
 }
 
 .active:hover {
-  background-color: rgba(52, 211, 153, 0.08);
+  background-color: rgba(16, 185, 129, 0.12);
   color: var(--accent-primary);
 }
 

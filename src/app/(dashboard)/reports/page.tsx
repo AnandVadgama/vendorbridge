@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import useSWR from 'swr';
 import { PageHeader } from '@/components/layout/PageHeader/PageHeader';
 import { Card } from '@/components/ui/Card/Card';
@@ -15,17 +15,28 @@ import {
   Download,
   AlertCircle
 } from 'lucide-react';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Cell
-} from 'recharts';
+import dynamic from 'next/dynamic';
 import styles from './reports.module.css';
+
+const SpendByCategoryChart = dynamic(() => import('@/components/reports/SpendByCategoryChart'), {
+  ssr: false,
+  loading: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '8px' }}>
+      <div className="spinner" />
+      <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Loading category spend...</span>
+    </div>
+  ),
+});
+
+const MonthlySpendTrendChart = dynamic(() => import('@/components/reports/MonthlySpendTrendChart'), {
+  ssr: false,
+  loading: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '8px' }}>
+      <div className="spinner" />
+      <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Loading spend trends...</span>
+    </div>
+  ),
+});
 
 const fetcher = (url: string) => fetch(url).then(async (res) => {
   if (!res.ok) {
@@ -57,15 +68,8 @@ interface ReportsData {
   }>;
 }
 
-const COLORS = ['#3b82f6', '#34d399', '#f59e0b', '#a855f7', '#14b8a6'];
-
 export default function ReportsPage() {
   const [filterPeriod, setFilterPeriod] = useState('YTD');
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const { data, error, isLoading } = useSWR<ReportsData>('/api/reports', fetcher);
 
@@ -165,54 +169,7 @@ export default function ReportsPage() {
         {/* Spend by Category Horizontal Bar Chart */}
         <Card title="Spend by Category" subtitle="Distribution of spend across material groupings" className={styles.card}>
           <div className={styles.chartWrapper}>
-            {isMounted && spendByCategory.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  layout="vertical"
-                  data={spendByCategory}
-                  margin={{ top: 10, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#2e3558" horizontal={false} />
-                  <XAxis
-                    type="number"
-                    stroke="#94a3b8"
-                    fontSize={12}
-                    tickLine={false}
-                    tickFormatter={(val) => `₹${val >= 100000 ? (val / 100000).toFixed(1) + 'L' : val}`}
-                  />
-                  <YAxis
-                    dataKey="category"
-                    type="category"
-                    stroke="#94a3b8"
-                    fontSize={12}
-                    tickLine={false}
-                  />
-                  <Tooltip
-                    cursor={{ fill: 'rgba(255, 255, 255, 0.02)' }}
-                    content={({ active, payload }) => {
-                      if (active && payload && payload.length) {
-                        return (
-                          <div className={styles.customTooltip}>
-                            <p className={styles.tooltipLabel}>{payload[0].payload.category}</p>
-                            <p className={styles.tooltipVal}>
-                              Spend: <strong>{formatCurrency(payload[0].value as number)}</strong>
-                            </p>
-                          </div>
-                        );
-                      }
-                      return null;
-                    }}
-                  />
-                  <Bar dataKey="spend" radius={[0, 4, 4, 0]} maxBarSize={30}>
-                    {spendByCategory.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className={styles.noData}>No category spend recorded in database container.</div>
-            )}
+            <SpendByCategoryChart spendByCategory={spendByCategory} />
           </div>
         </Card>
 
@@ -247,40 +204,7 @@ export default function ReportsPage() {
       <div className={styles.fullWidthSection}>
         <Card title="Monthly Spend Trend" subtitle="Procurement volume tracking for last 6 months" className={styles.card}>
           <div className={styles.trendChartWrapper}>
-            {isMounted && monthlyTrend.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyTrend} margin={{ top: 15, right: 15, left: -10, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#2e3558" vertical={false} />
-                  <XAxis dataKey="month" stroke="#94a3b8" fontSize={12} tickLine={false} />
-                  <YAxis
-                    stroke="#94a3b8"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                    tickFormatter={(val) => `₹${val >= 100000 ? (val / 100000).toFixed(1) + 'L' : val}`}
-                  />
-                  <Tooltip
-                    cursor={{ fill: 'rgba(255, 255, 255, 0.02)' }}
-                    content={({ active, payload }) => {
-                      if (active && payload && payload.length) {
-                        return (
-                          <div className={styles.customTooltip}>
-                            <p className={styles.tooltipLabel}>{payload[0].payload.month}</p>
-                            <p className={styles.tooltipVal}>
-                              Total: <strong>{formatCurrency(payload[0].value as number)}</strong>
-                            </p>
-                          </div>
-                        );
-                      }
-                      return null;
-                    }}
-                  />
-                  <Bar dataKey="spend" fill="#3b82f6" radius={[4, 4, 0, 0]} maxBarSize={50} />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className={styles.noData}>No spend trend data available.</div>
-            )}
+            <MonthlySpendTrendChart monthlyTrend={monthlyTrend} />
           </div>
         </Card>
       </div>

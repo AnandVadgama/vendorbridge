@@ -1,17 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
-
 /* === GLOBAL DESIGN SYSTEM === */
 :root {
-  /* Colors - Theme Dark Navy (Primary from PNG) */
-  --bg-primary: #101223;          /* Main workspace dark navy */
-  --bg-secondary: #171b30;        /* Sidebar & dark panel backgrounds */
-  --bg-card: #202442;             /* Card/list item background */
-  --bg-input: #0e101f;            /* Input field background */
-  --bg-table-row: #1b1e36;        /* Alternating table rows */
-  --bg-table-header: #0b0d1a;     /* Deep header dark navy */
+  /* Colors - Theme Dark Navy (Primary from PNG) - Default theme */
+  --bg-primary: #0a0b10;          /* Main workspace dark navy */
+  --bg-secondary: #111422;        /* Sidebar & dark panel backgrounds */
+  --bg-card: #181c30;             /* Card/list item background */
+  --bg-input: #07080d;            /* Input field background */
+  --bg-table-row: #14172a;        /* Alternating table rows */
+  --bg-table-header: #07080e;     /* Deep header dark navy */
 
   /* Accents */
-  --accent-primary: #34d399;      /* Emerald Green (Primary accent - active tabs, success badges) */
+  --accent-primary: #10b981;      /* Emerald Green (Primary accent - active tabs, success badges) */
   --accent-primary-hover: #059669;/* Darker emerald green for hovers */
   --accent-blue: #3b82f6;         /* Bright Blue (Info, link accents, secondary indicators) */
   --accent-blue-hover: #2563eb;
@@ -21,21 +19,21 @@
   --accent-purple: #a855f7;       /* Purple (Milestones, step indicators) */
 
   /* Borders & Shadows */
-  --border-color: #2e3558;        /* Subtle card & input borders */
-  --border-focus: #34d399;        /* Active focus border - emerald green */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.5);
+  --border-color: #22263f;        /* Subtle card & input borders */
+  --border-focus: #10b981;        /* Active focus border - emerald green */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.6);
   
   /* Text Colors */
-  --text-primary: #f8fafc;        /* High-contrast white/slate */
-  --text-secondary: #94a3b8;      /* Muted slate gray */
-  --text-muted: #64748b;          /* Low-contrast details */
+  --text-primary: #f9fafb;        /* High-contrast white/slate */
+  --text-secondary: #9ca3af;      /* Muted slate gray */
+  --text-muted: #6b7280;          /* Low-contrast details */
   --text-inverse: #0f172a;        /* Black text for light badge contexts */
 
   /* Fonts */
-  --font-display: 'Outfit', 'Inter', -apple-system, sans-serif;
-  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-display: var(--font-display), -apple-system, sans-serif;
+  --font-body: var(--font-body), -apple-system, sans-serif;
 
   /* Border Radii */
   --radius-xs: 4px;
@@ -49,6 +47,40 @@
   --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+[data-theme="light"] {
+  /* Colors - Light Theme */
+  --bg-primary: #f9fafb;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-input: #f3f4f6;
+  --bg-table-row: #fafafa;
+  --bg-table-header: #f3f4f6;
+
+  /* Accents */
+  --accent-primary: #059669;
+  --accent-primary-hover: #047857;
+  --accent-blue: #2563eb;
+  --accent-blue-hover: #1d4ed8;
+  --accent-orange: #d97706;
+  --accent-red: #dc2626;
+  --accent-red-hover: #b91c1c;
+  --accent-purple: #9333ea;
+
+  /* Borders & Shadows */
+  --border-color: #e5e7eb;
+  --border-focus: #059669;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+  /* Text Colors */
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+  --text-inverse: #ffffff;
+}
+
 
 /* === BASE RESETS === */
 * {
@@ -67,6 +99,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden; /* App Shell scrolls internally */
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
 input, button, select, textarea {

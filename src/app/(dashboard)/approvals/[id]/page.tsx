@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import useSWR from 'swr';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/useSession';
 import Link from 'next/link';
 import { ArrowLeft, CheckCircle2, XCircle, Clock, ShieldAlert, FileText, Send, User, ChevronRight } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader/PageHeader';

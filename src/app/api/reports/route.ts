@@ -19,49 +19,83 @@ export const GET = auth(async (req) => {
   }
 
   try {
-    // 1. Total Spend YTD
-    const spendSum = await prisma.purchaseOrder.aggregate({
-      _sum: { grandTotal: true },
-      where: {
-        status: { in: [PoStatus.ISSUED, PoStatus.RECEIVED, PoStatus.COMPLETED] },
-      },
-    });
-    const totalSpend = spendSum._sum.grandTotal || 0;
+    // 7. Monthly Spend Trend (Last 6 months) - Define start date beforehand
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+    sixMonthsAgo.setDate(1);
+    sixMonthsAgo.setHours(0, 0, 0, 0);
 
-    // 2. Active Vendors
-    const activeVendors = await prisma.vendor.count({
-      where: { status: VendorStatus.ACTIVE },
-    });
-
-    // 3. PO Fulfillment Rate (Completed POs / Total POs)
-    const totalPosCount = await prisma.purchaseOrder.count();
-    const completedPosCount = await prisma.purchaseOrder.count({
-      where: { status: PoStatus.COMPLETED },
-    });
-    const poFulfillmentRate = totalPosCount > 0 
-      ? Math.round((completedPosCount / totalPosCount) * 100) 
-      : 100; // Default if no POs exist
-
-    // 4. Pending Invoices
-    const pendingInvoices = await prisma.invoice.count({
-      where: { status: InvoiceStatus.PENDING_PAYMENT },
-    });
-
-    // 5. Spend by Category
-    const pos = await prisma.purchaseOrder.findMany({
-      where: {
-        status: { in: [PoStatus.ISSUED, PoStatus.RECEIVED, PoStatus.COMPLETED] },
-      },
-      include: {
-        quotation: {
-          select: {
-            rfq: {
-              select: { category: true },
+    const [
+      spendSum,
+      activeVendors,
+      totalPosCount,
+      completedPosCount,
+      pendingInvoices,
+      pos,
+      vendorSpendGroups,
+      posForTrend
+    ] = await Promise.all([
+      // 1. Total Spend YTD
+      prisma.purchaseOrder.aggregate({
+        _sum: { grandTotal: true },
+        where: {
+          status: { in: [PoStatus.ISSUED, PoStatus.RECEIVED, PoStatus.COMPLETED] },
+        },
+      }),
+      // 2. Active Vendors
+      prisma.vendor.count({
+        where: { status: VendorStatus.ACTIVE },
+      }),
+      // 3a. Total POs Count
+      prisma.purchaseOrder.count(),
+      // 3b. Completed POs Count
+      prisma.purchaseOrder.count({
+        where: { status: PoStatus.COMPLETED },
+      }),
+      // 4. Pending Invoices
+      prisma.invoice.count({
+        where: { status: InvoiceStatus.PENDING_PAYMENT },
+      }),
+      // 5. Spend by Category POs
+      prisma.purchaseOrder.findMany({
+        where: {
+          status: { in: [PoStatus.ISSUED, PoStatus.RECEIVED, PoStatus.COMPLETED] },
+        },
+        include: {
+          quotation: {
+            select: {
+              rfq: { select: { category: true } },
             },
           },
         },
-      },
-    });
+      }),
+      // 6. Top Vendors by Spend Group
+      prisma.purchaseOrder.groupBy({
+        by: ['vendorId'],
+        _sum: { grandTotal: true },
+        _count: { id: true },
+        where: {
+          status: { in: [PoStatus.ISSUED, PoStatus.RECEIVED, PoStatus.COMPLETED] },
+        },
+        orderBy: {
+          _sum: { grandTotal: 'desc' },
+        },
+        take: 5,
+      }),
+      // 7. Monthly Spend Trend POs
+      prisma.purchaseOrder.findMany({
+        where: {
+          poDate: { gte: sixMonthsAgo },
+          status: { in: [PoStatus.ISSUED, PoStatus.RECEIVED, PoStatus.COMPLETED] },
+        },
+        select: { grandTotal: true, poDate: true },
+      }),
+    ]);
+
+    const totalSpend = spendSum._sum.grandTotal || 0;
+    const poFulfillmentRate = totalPosCount > 0 
+      ? Math.round((completedPosCount / totalPosCount) * 100) 
+      : 100; // Default if no POs exist
 
     const categorySpendMap: Record<string, number> = {
       'IT Hardware': 0,
@@ -84,20 +118,6 @@ export const GET = auth(async (req) => {
       spend: categorySpendMap[key],
     }));
 
-    // 6. Top Vendors by Spend
-    const vendorSpendGroups = await prisma.purchaseOrder.groupBy({
-      by: ['vendorId'],
-      _sum: { grandTotal: true },
-      _count: { id: true },
-      where: {
-        status: { in: [PoStatus.ISSUED, PoStatus.RECEIVED, PoStatus.COMPLETED] },
-      },
-      orderBy: {
-        _sum: { grandTotal: 'desc' },
-      },
-      take: 5,
-    });
-
     const topVendors = await Promise.all(
       vendorSpendGroups.map(async (group) => {
         const vendor = await prisma.vendor.findUnique({
@@ -111,20 +131,6 @@ export const GET = auth(async (req) => {
         };
       })
     );
-
-    // 7. Monthly Spend Trend (Last 6 months)
-    const sixMonthsAgo = new Date();
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
-    sixMonthsAgo.setDate(1);
-    sixMonthsAgo.setHours(0, 0, 0, 0);
-
-    const posForTrend = await prisma.purchaseOrder.findMany({
-      where: {
-        poDate: { gte: sixMonthsAgo },
-        status: { in: [PoStatus.ISSUED, PoStatus.RECEIVED, PoStatus.COMPLETED] },
-      },
-      select: { grandTotal: true, poDate: true },
-    });
 
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const trendMap: Record<string, number> = {};

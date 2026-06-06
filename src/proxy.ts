@@ -1,41 +1,30 @@
-import { auth } from '@/auth';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-export const proxy = auth((req) => {
-  const isLoggedIn = !!req.auth;
-  const { nextUrl } = req;
+const isProtectedRoute = createRouteMatcher([
+  '/dashboard(.*)',
+  '/vendors(.*)',
+  '/rfqs(.*)',
+  '/quotations(.*)',
+  '/approvals(.*)',
+  '/purchase-orders(.*)',
+  '/invoices(.*)',
+  '/activity(.*)',
+  '/reports(.*)',
+]);
 
-  const isAuthRoute =
-    nextUrl.pathname === '/login' ||
-    nextUrl.pathname === '/register';
-  
-  const isDashboardRoute =
-    nextUrl.pathname.startsWith('/dashboard') ||
-    nextUrl.pathname.startsWith('/vendors') ||
-    nextUrl.pathname.startsWith('/rfqs') ||
-    nextUrl.pathname.startsWith('/quotations') ||
-    nextUrl.pathname.startsWith('/approvals') ||
-    nextUrl.pathname.startsWith('/purchase-orders') ||
-    nextUrl.pathname.startsWith('/invoices') ||
-    nextUrl.pathname.startsWith('/activity') ||
-    nextUrl.pathname.startsWith('/reports');
-
-  if (isAuthRoute) {
-    if (isLoggedIn) {
-      return Response.redirect(new URL('/dashboard', nextUrl));
-    }
-    return undefined;
+export default clerkMiddleware(async (auth, req) => {
+  if (isProtectedRoute(req)) {
+    await auth.protect();
   }
-
-  if (isDashboardRoute) {
-    if (!isLoggedIn) {
-      return Response.redirect(new URL('/login', nextUrl));
-    }
-    return undefined;
-  }
-
-  return undefined;
 });
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.[0-9a-z]+$).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
+    // Include Clerk's auto-proxy path after API/TRPC matcher
+    '/__clerk/:path*',
+  ],
 };

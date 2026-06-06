@@ -14,75 +14,59 @@ export const GET = auth(async (req) => {
   }
 
   try {
-    // 1. Active RFQs Count
-    const activeRfqsCount = await prisma.rfq.count({
-      where: {
-        status: RfqStatus.OPEN,
-      },
-    });
-
-    // 2. Pending Approvals Count
-    const pendingApprovalsCount = await prisma.approval.count({
-      where: {
-        status: ApprovalStatus.PENDING,
-      },
-    });
-
-    // 3. Total Spend (Sum of PO grand totals with status ISSUED, RECEIVED, or COMPLETED)
-    const spendAggregation = await prisma.purchaseOrder.aggregate({
-      _sum: {
-        grandTotal: true,
-      },
-      where: {
-        status: {
-          in: [PoStatus.ISSUED, PoStatus.RECEIVED, PoStatus.COMPLETED],
-        },
-      },
-    });
-    const totalSpend = spendAggregation._sum.grandTotal || 0;
-
-    // 4. Pending Invoices Count
-    const pendingInvoicesCount = await prisma.invoice.count({
-      where: {
-        status: InvoiceStatus.PENDING_PAYMENT,
-      },
-    });
-
-    // 5. Recent Purchase Orders (Take 5)
-    const recentPurchaseOrders = await prisma.purchaseOrder.findMany({
-      orderBy: {
-        poDate: 'desc',
-      },
-      take: 5,
-      include: {
-        vendor: {
-          select: {
-            companyName: true,
-          },
-        },
-      },
-    });
-
-    // 6. Trend Data (Spend by month for the last 6 months)
+    // 6. Trend Data (Spend by month for the last 6 months) - Define start date beforehand
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
     sixMonthsAgo.setDate(1); // Set to start of month
     sixMonthsAgo.setHours(0, 0, 0, 0);
 
-    const posForTrend = await prisma.purchaseOrder.findMany({
-      where: {
-        poDate: {
-          gte: sixMonthsAgo,
+    // Query all database metrics in parallel
+    const [
+      activeRfqsCount,
+      pendingApprovalsCount,
+      spendAggregation,
+      pendingInvoicesCount,
+      recentPurchaseOrders,
+      posForTrend
+    ] = await Promise.all([
+      // 1. Active RFQs Count
+      prisma.rfq.count({
+        where: { status: RfqStatus.OPEN },
+      }),
+      // 2. Pending Approvals Count
+      prisma.approval.count({
+        where: { status: ApprovalStatus.PENDING },
+      }),
+      // 3. Total Spend Aggregation
+      prisma.purchaseOrder.aggregate({
+        _sum: { grandTotal: true },
+        where: {
+          status: { in: [PoStatus.ISSUED, PoStatus.RECEIVED, PoStatus.COMPLETED] },
         },
-        status: {
-          in: [PoStatus.ISSUED, PoStatus.RECEIVED, PoStatus.COMPLETED],
+      }),
+      // 4. Pending Invoices Count
+      prisma.invoice.count({
+        where: { status: InvoiceStatus.PENDING_PAYMENT },
+      }),
+      // 5. Recent Purchase Orders (Take 5)
+      prisma.purchaseOrder.findMany({
+        orderBy: { poDate: 'desc' },
+        take: 5,
+        include: {
+          vendor: { select: { companyName: true } },
         },
-      },
-      select: {
-        grandTotal: true,
-        poDate: true,
-      },
-    });
+      }),
+      // 6. Trend Data (POs for spend trend)
+      prisma.purchaseOrder.findMany({
+        where: {
+          poDate: { gte: sixMonthsAgo },
+          status: { in: [PoStatus.ISSUED, PoStatus.RECEIVED, PoStatus.COMPLETED] },
+        },
+        select: { grandTotal: true, poDate: true },
+      }),
+    ]);
+
+    const totalSpend = spendAggregation._sum.grandTotal || 0;
 
     // Process last 6 months labels
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

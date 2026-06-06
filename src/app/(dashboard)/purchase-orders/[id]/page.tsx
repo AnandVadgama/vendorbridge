@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import useSWR from 'swr';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/useSession';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -180,12 +180,26 @@ export default function PurchaseOrderDetailPage() {
     window.print();
   };
 
-  // Handle Email PDF Simulation
-  const handleEmailSim = async () => {
+  // Handle Email PO to Vendor
+  const handleEmailVendor = async () => {
     setActionsLoading('email');
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    alert(`✉️ PO & Invoice successfully emailed to ${po.vendor.email}!`);
-    setActionsLoading(null);
+    try {
+      const res = await fetch(`/api/purchase-orders/${poId}/email`, {
+        method: 'POST',
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || 'Failed to send email');
+      }
+
+      alert(`✉️ PO & Invoice successfully emailed to ${po.vendor.email}!`);
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || 'Error emailing PO');
+    } finally {
+      setActionsLoading(null);
+    }
   };
 
   // Handle PDF Download Simulation
@@ -215,7 +229,7 @@ export default function PurchaseOrderDetailPage() {
           </button>
           <button
             className={styles.actionIconBtn}
-            onClick={handleEmailSim}
+            onClick={handleEmailVendor}
             disabled={actionsLoading === 'email'}
             title="Email to Vendor"
           >

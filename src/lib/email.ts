@@ -12,17 +12,18 @@ interface SendEmailParams {
 }
 
 // Retrieve SMTP settings from environment variables
-const SMTP_HOST = process.env.SMTP_HOST || 'sandbox.smtp.mailtrap.io';
-const SMTP_PORT = parseInt(process.env.SMTP_PORT || '2525', 10);
-const SMTP_USER = process.env.SMTP_USER;
-const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
-const SMTP_FROM = process.env.SMTP_FROM || 'noreply@vendorbridge.com';
+const getSMTPFrom = () => process.env.SMTP_FROM || 'noreply@vendorbridge.com';
 
 /**
  * Creates and returns a transporter. Falls back to a mock transporter if user/password is missing
  * to avoid breaking the application flow during hackathon demos.
  */
 function getTransporter() {
+  const SMTP_HOST = process.env.SMTP_HOST || 'sandbox.smtp.mailtrap.io';
+  const SMTP_PORT = parseInt(process.env.SMTP_PORT || '2525', 10);
+  const SMTP_USER = process.env.SMTP_USER;
+  const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
+
   if (!SMTP_USER || !SMTP_PASSWORD) {
     console.warn(
       '⚠️ SMTP_USER or SMTP_PASSWORD is not set. Email utility will run in SIMULATION mode.'
@@ -36,7 +37,7 @@ function getTransporter() {
     secure: SMTP_PORT === 465, // True for port 465, false for other ports (like 587 or 2525)
     auth: {
       user: SMTP_USER,
-      password: SMTP_PASSWORD,
+      pass: SMTP_PASSWORD,
     },
   } as any);
 }
@@ -48,7 +49,7 @@ export async function sendEmail({ to, subject, html, attachments }: SendEmailPar
   const transporter = getTransporter();
 
   const mailOptions = {
-    from: SMTP_FROM,
+    from: getSMTPFrom(),
     to,
     subject,
     html,

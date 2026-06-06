@@ -169,7 +169,7 @@
 }
 
 .actionBtn:hover {
-  background-color: rgba(23, 27, 48, 0.4);
+  background-color: rgba(16, 185, 129, 0.04);
   border-color: var(--accent-primary);
   transform: translateX(4px);
 }

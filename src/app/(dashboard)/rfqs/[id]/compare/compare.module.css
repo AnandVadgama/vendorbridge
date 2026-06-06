@@ -130,7 +130,7 @@
   flex-direction: column;
   gap: 0.25rem;
   border-right: 1px solid var(--border-color);
-  background-color: rgba(23, 27, 48, 0.2);
+  background-color: var(--bg-secondary);
 }
 
 .itemName {
@@ -179,7 +179,7 @@
   color: var(--text-secondary);
   font-size: 0.875rem;
   border-right: 1px solid var(--border-color);
-  background-color: rgba(23, 27, 48, 0.2);
+  background-color: var(--bg-secondary);
 }
 
 .critBox {

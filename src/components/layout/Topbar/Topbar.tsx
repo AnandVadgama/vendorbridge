@@ -1,23 +1,35 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Bell, Search, User as UserIcon, Settings, LogOut } from 'lucide-react';
-import { useSession, signOut } from 'next-auth/react';
+import { Bell, Search, Sun, Moon } from 'lucide-react';
+import { UserButton } from '@clerk/nextjs';
+import { useSession } from '@/lib/useSession';
+import { useTheme } from '@/components/ThemeProvider';
 import styles from './Topbar.module.css';
 
 export const Topbar: React.FC = () => {
   const { data: session } = useSession();
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const me = session?.user;
   const [showNotifications, setShowNotifications] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
-  const user = session?.user;
-  
+  const handleRoleChange = async (newRole: string) => {
+    try {
+      const res = await fetch('/api/auth/me', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role: newRole }),
+      });
+      if (res.ok) {
+        window.location.reload();
+      }
+    } catch (e) {
+      console.error('Error changing role:', e);
+    }
+  };
+
   // Dummy notification count
   const unreadNotifications = 3;
-
-  const handleLogout = () => {
-    signOut({ callbackUrl: '/login' });
-  };
 
   return (
     <header className={styles.topbar}>
@@ -33,6 +45,16 @@ export const Topbar: React.FC = () => {
 
       {/* Action Items */}
       <div className={styles.actions}>
+        {/* Theme Toggle */}
+        <button
+          className={styles.iconButton}
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
+
         {/* Notification Bell */}
         <div className={styles.iconButtonContainer}>
           <button
@@ -77,37 +99,38 @@ export const Topbar: React.FC = () => {
         <div className={styles.divider} />
 
         {/* User Profile */}
-        <div className={styles.profileContainer}>
-          <button
-            className={styles.profileButton}
-            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-          >
-            <div className={styles.avatar}>
-              {user?.image ? (
-                <img src={user.image} alt={user.name || 'User'} className={styles.avatarImg} />
-              ) : (
-                <UserIcon size={16} />
-              )}
-            </div>
-            <div className={styles.userInfo}>
-              <span className={styles.userName}>
-                {user?.name || 'Procurement Officer'}
+        <div className={styles.profileContainer} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <UserButton showName={false} />
+          {me && (
+            <div className={styles.userInfo} style={{ textAlign: 'left' }}>
+              <span className={styles.userName} style={{ display: 'block', fontSize: '14px', fontWeight: 600 }}>
+                {me.name}
               </span>
-              <span className={styles.userRole}>
-                {user?.role ? String(user.role).replace('_', ' ') : 'Officer'}
+              <span className={styles.userRole} style={{ display: 'block', fontSize: '11px', color: 'var(--text-muted)' }}>
+                Role: 
+                <select
+                  value={me.role}
+                  onChange={(e) => handleRoleChange(e.target.value)}
+                  style={{
+                    marginLeft: '4px',
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--accent-primary)',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    fontSize: '11px',
+                    outline: 'none',
+                    padding: '2px'
+                  }}
+                >
+                  <option value="ADMIN" style={{ backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)' }}>Admin</option>
+                  <option value="PROCUREMENT_OFFICER" style={{ backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)' }}>Procurement Officer</option>
+                  <option value="MANAGER" style={{ backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)' }}>Manager</option>
+                  <option value="VENDOR" style={{ backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)' }}>Vendor</option>
+                </select>
               </span>
             </div>
-          </button>
-
-          {showProfileDropdown ? (
-            <div className={styles.profileDropdown}>
-              <LinkItem href="/settings" icon={Settings} label="Settings" />
-              <button className={styles.dropdownBtn} onClick={handleLogout}>
-                <LogOut size={16} />
-                <span>Logout</span>
-              </button>
-            </div>
-          ) : null}
+          )}
         </div>
       </div>
     </header>

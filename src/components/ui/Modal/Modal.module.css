@@ -46,7 +46,7 @@
 
 .closeBtn:hover {
   color: var(--text-primary);
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(16, 185, 129, 0.04);
 }
 
 .content {

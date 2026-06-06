@@ -27,15 +27,15 @@
 }
 
 .bodyRow:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.015);
+  background-color: var(--bg-table-row);
 }
 
 .bodyRow:nth-child(odd) {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: transparent;
 }
 
 .bodyRow:hover {
-  background-color: rgba(52, 211, 153, 0.04); /* Subtle emerald row highlight */
+  background-color: rgba(16, 185, 129, 0.04); /* Subtle emerald row highlight */
 }
 
 .cell {

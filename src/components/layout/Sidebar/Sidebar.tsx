@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import styles from './Sidebar.module.css';
 import { cn } from '@/lib/utils';
-import { signOut } from 'next-auth/react';
+import { useClerk } from '@clerk/nextjs';
 
 interface SidebarLink {
   label: string;
@@ -34,15 +34,16 @@ const sidebarLinks: SidebarLink[] = [
   { label: 'Approvals', href: '/approvals', icon: CheckSquare },
   { label: 'Purchase Orders', href: '/purchase-orders', icon: ShoppingBag },
   { label: 'Invoices', href: '/invoices', icon: CreditCard },
-  { label: 'Activity Logs', href: '/activity', icon: History },
   { label: 'Reports', href: '/reports', icon: BarChart3 },
+  { label: 'Activity', href: '/activity', icon: History },
 ];
 
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
+  const { signOut } = useClerk();
 
   const handleLogout = () => {
-    signOut({ callbackUrl: '/login' });
+    signOut({ redirectUrl: '/sign-in' });
   };
 
   return (

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import useSWR from 'swr';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/useSession';
 import { Search, FileSpreadsheet, AlertCircle, ChevronRight } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader/PageHeader';
 import { Card } from '@/components/ui/Card/Card';

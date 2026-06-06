@@ -41,8 +41,7 @@
 .input:focus,
 .textarea:focus {
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.15);
-  background-color: rgba(14, 16, 31, 0.8);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
 }
 
 .inputError {

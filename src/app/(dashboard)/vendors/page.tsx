@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import useSWR from 'swr';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/useSession';
 import { Search, Plus, Edit2, Trash2, ShieldAlert, Star } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader/PageHeader';
 import { Button } from '@/components/ui/Button/Button';

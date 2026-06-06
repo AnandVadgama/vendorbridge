@@ -35,12 +35,12 @@
 /* === VARIANTS === */
 .primary {
   background-color: var(--accent-primary);
-  color: var(--bg-primary);
+  color: var(--text-inverse);
 }
 
 .primary:hover:not(:disabled) {
   background-color: var(--accent-primary-hover);
-  box-shadow: 0 0 12px rgba(52, 211, 153, 0.25);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
 }
 
 .secondary {
@@ -79,8 +79,8 @@
 }
 
 .outline:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-color: var(--text-secondary);
+  background-color: rgba(16, 185, 129, 0.04);
+  border-color: var(--accent-primary);
 }
 
 .ghost {
@@ -89,7 +89,7 @@
 }
 
 .ghost:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(16, 185, 129, 0.04);
   color: var(--text-primary);
 }
 

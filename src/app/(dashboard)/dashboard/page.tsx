@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import useSWR from 'swr';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/useSession';
 import Link from 'next/link';
 import {
   FileText,
@@ -19,16 +19,18 @@ import { Card } from '@/components/ui/Card/Card';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { Table, TableHeader, TableBody, TableRow, TableCell } from '@/components/ui/Table/Table';
 import { formatCurrency, formatDate } from '@/lib/utils';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer
-} from 'recharts';
+import dynamic from 'next/dynamic';
 import styles from './dashboard.module.css';
+
+const DashboardChart = dynamic(() => import('@/components/dashboard/DashboardChart'), {
+  ssr: false,
+  loading: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '8px' }}>
+      <div className="spinner" />
+      <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Loading analytics...</span>
+    </div>
+  ),
+});
 
 const fetcher = (url: string) => fetch(url).then(async (res) => {
   if (!res.ok) {
@@ -63,12 +65,6 @@ export default function DashboardPage() {
   const userName = session?.user?.name || 'User';
   const userRole = session?.user?.role;
   const isStaff = userRole === 'ADMIN' || userRole === 'PROCUREMENT_OFFICER';
-
-  // Fix Recharts hydration mismatches
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const { data, error, isLoading } = useSWR<DashboardData>('/api/dashboard', fetcher);
 
@@ -134,40 +130,7 @@ export default function DashboardPage() {
         {/* Analytics Chart */}
         <Card title="Monthly Spend Trend" subtitle="Procurement spend statistics over the last 6 months" className={styles.chartCard}>
           <div className={styles.chartWrapper}>
-            {isMounted && trend.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={trend} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#2e3558" vertical={false} />
-                  <XAxis dataKey="month" stroke="#94a3b8" fontSize={12} tickLine={false} />
-                  <YAxis
-                    stroke="#94a3b8"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                    tickFormatter={(val) => `₹${val >= 100000 ? (val / 100000).toFixed(1) + 'L' : val}`}
-                  />
-                  <Tooltip
-                    cursor={{ fill: 'rgba(255, 255, 255, 0.02)' }}
-                    content={({ active, payload }) => {
-                      if (active && payload && payload.length) {
-                        return (
-                          <div className={styles.customTooltip}>
-                            <p className={styles.tooltipLabel}>{payload[0].payload.month}</p>
-                            <p className={styles.tooltipVal}>
-                              Spend: <strong>{formatCurrency(payload[0].value as number)}</strong>
-                            </p>
-                          </div>
-                        );
-                      }
-                      return null;
-                    }}
-                  />
-                  <Bar dataKey="spend" fill="#34d399" radius={[4, 4, 0, 0]} maxBarSize={45} />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className={styles.noData}>No data available for chart visualization</div>
-            )}
+            <DashboardChart trend={trend} />
           </div>
         </Card>
 
